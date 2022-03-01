@@ -33,30 +33,30 @@ const useStyles = makeStyles(() => ({
   root: {},
 }));
 
-const query = [
-  {
-    ssid: "tet0",
-    mac: "##################",
-    security: "WPA2",
-  },
-  {
-    ssid: "tet1",
-    mac: "##################",
-    security: "WPA2",
-  },
-  {
-    ssid: "tet2",
-    mac: "##################",
-    security: "WPA2",
-  },
-  {
-    ssid: "tet3",
-    mac: "##################",
-    security: "WPA2",
-  },
-];
+// const query = [
+//   {
+//     ssid: "tet0",
+//     mac: "##################",
+//     security: "WPA2",
+//   },
+//   {
+//     ssid: "tet1",
+//     mac: "##################",
+//     security: "WPA2",
+//   },
+//   {
+//     ssid: "tet2",
+//     mac: "##################",
+//     security: "WPA2",
+//   },
+//   {
+//     ssid: "tet3",
+//     mac: "##################",
+//     security: "WPA2",
+//   },
+// ];
 
-function WifiList() {
+function WifiList({ query }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState({ ssid: "", password: "" });
@@ -108,7 +108,7 @@ function WifiList() {
                   return (
                     <TableRow
                       hover
-                      key={item.ssid}
+                      key={item.mac}
                       selected={selectedItems.indexOf(item.ssid) !== -1}
                     >
                       <TableCell>{item.ssid}</TableCell>
