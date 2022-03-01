@@ -73,8 +73,13 @@ function WifiList({ query }) {
   }
 
   function handelSubmit() {
+    const headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Access-Control-Allow-Origin": "*",
+      Accept: "application/json",
+    };
     axios
-      .post("localhost:9000/connect", data)
+      .post("localhost:9000/connect", data, { headers: headers })
       .catch((e) => console.log(e))
       .then((x) => console.log(x));
   }
