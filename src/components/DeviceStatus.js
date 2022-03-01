@@ -13,7 +13,6 @@ import {
   Paper,
   Grid,
 } from "@material-ui/core";
-import Image from "next/image";
 
 function DeviceStatus() {
   return (
@@ -29,7 +28,12 @@ function DeviceStatus() {
               </Grid>
             </Grid>
             <Grid item container container justifyContent={"center"}>
-              <Image src="/hotspot.png" alt="" width="100px" height="100px" />
+              <img
+                src={require("../../public/hotspot.png")}
+                alt=""
+                width="100px"
+                height="100px"
+              />
             </Grid>
             <Typography variant="body2" align="center" color="text.secondary">
               Device mode is Hot spot
