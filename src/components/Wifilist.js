@@ -28,46 +28,61 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useTable from "../../src/control/UseTable";
+import axios from "axios";
 const useStyles = makeStyles(() => ({
   root: {},
 }));
 
-// const query = [
-//   {
-//     name: "tet1",
-//     bssid: "##################",
-//     signal: "90%",
-//     security: "WPA2",
-//   },
-//   {
-//     name: "tet1",
-//     bssid: "##################",
-//     signal: "85%",
-//     security: "WPA2",
-//   },
-//   {
-//     name: "tet2",
-//     bssid: "##################",
-//     signal: "80%",
-//     security: "WPA2",
-//   },
-//   {
-//     name: "tet3",
-//     bssid: "##################",
-//     signal: "60%",
-//     security: "WPA2",
-//   },
-// ];
+const query = [
+  {
+    ssid: "tet0",
+    mac: "##################",
+    security: "WPA2",
+  },
+  {
+    ssid: "tet1",
+    mac: "##################",
+    security: "WPA2",
+  },
+  {
+    ssid: "tet2",
+    mac: "##################",
+    security: "WPA2",
+  },
+  {
+    ssid: "tet3",
+    mac: "##################",
+    security: "WPA2",
+  },
+];
 
-function WifiList({ query }) {
+function WifiList() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [data, setData] = React.useState({ ssid: "", password: "" });
 
   const {
     // items,
     selectedItems,
     isLoading: isTableLoading,
   } = useTable({ query });
+
+  function handelPassword(password) {
+    const newdata = { ...data, password: password };
+    setData(newdata);
+  }
+
+  function handelSubmit() {
+    axios
+      .post("localhost:9000/connect", data)
+      .catch((e) => console.log(e))
+      .then((x) => console.log(x));
+  }
+
+  function handelSsid(ssid) {
+    const newdata = { ...data, ssid: ssid };
+    setData(newdata);
+  }
 
   return (
     <div>
@@ -93,17 +108,18 @@ function WifiList({ query }) {
                   return (
                     <TableRow
                       hover
-                      key={item.mac}
-                      selected={selectedItems.indexOf(item.mac) !== -1}
+                      key={item.ssid}
+                      selected={selectedItems.indexOf(item.ssid) !== -1}
                     >
                       <TableCell>{item.ssid}</TableCell>
                       <TableCell>{item.mac}</TableCell>
-                      
+
                       <TableCell>{item.security[0]}</TableCell>
                       <TableCell align="right">
                         <IconButton
                           onClick={() => {
                             setOpen(true);
+                            handelSsid(item.ssid);
                           }}
                         >
                           <SvgIcon fontSize="small">
@@ -126,30 +142,36 @@ function WifiList({ query }) {
         }}
       >
         <DialogTitle>Wifi network Password</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please enter the selected Wifi network password you want to connect
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="password"
-            label="Wifi password"
-            type="password"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button>Connect</Button>
-        </DialogActions>
+        <form>
+          <DialogContent>
+            <DialogContentText>
+              Please enter the selected Wifi network password you want to
+              connect
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="password"
+              id="password"
+              label="Wifi password"
+              type="password"
+              fullWidth
+              variant="standard"
+              value={data.password}
+              onChange={(e) => handelPassword(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button onClick={() => handelSubmit()}>Connect</Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
